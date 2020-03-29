@@ -4,34 +4,32 @@ package task1.itembase;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Objects;
 
 
 import task1.exeptions.ItemAlreadyPlacedException;
 import task1.exeptions.ItemStoreException;
-import task1.general.Container;
+import task1.general.Items;
 
-public class BagItems extends ArrayList<Container> implements Container {
+
+public class BagItems extends Items {
     private final int totalWeight;
     private final String nameContainer;
-    private final String type = "bag";
     private String nameInContainer;
     private boolean owner = false;
     private int curretWeight;
-    private final boolean flat = false;
-    private boolean unlock = false;
-    private ArrayList<ItemImplementation> listItems;
-    private ArrayList<BagItems> listContainers;
+    private List<Items> listItems;
 
-    public BagItems(ArrayList<ItemImplementation> listItems, ArrayList<BagItems> listContainers, String nameContainer, int curretWeight, int totalWeight) {
+    public BagItems(List<Items> listItems, String nameContainer, int curretWeight, int totalWeight) {
+        super();
         this.listItems = listItems;
         this.curretWeight = curretWeight;
         this.nameContainer = nameContainer;
         this.totalWeight = totalWeight;
-        this.listContainers = listContainers;
     }
 
-    private ItemImplementation RandomItem() {
-        List<ItemImplementation> mainList = new ArrayList<>();
+    private Items randomItem() {
+        List<Items> mainList = new ArrayList<>();
         mainList.addAll(listItems);
         int startNumber = 0;
         int random_number = startNumber + (int) (Math.random() * listItems.size());
@@ -48,15 +46,12 @@ public class BagItems extends ArrayList<Container> implements Container {
         this.curretWeight = curretWeight;
     }
 
-    private void setOwner(boolean owner) {
+    void setOwnerContainer(boolean owner) {
         this.owner = owner;
     }
 
-    private boolean isUnlock() {
-        return unlock;
-    }
 
-    private String getNameContainer() {
+    public String getNameContainer() {
         return nameContainer;
     }
 
@@ -68,19 +63,15 @@ public class BagItems extends ArrayList<Container> implements Container {
         return nameInContainer;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public boolean isOwner() {
         return owner;
     }
 
-    @Override
+
     public void addItemToContainer(ItemImplementation item) throws ItemAlreadyPlacedException, ItemStoreException {
 
         int futureWeight = curretWeight + item.getWeightItem();
-        if (futureWeight <= totalWeight && !item.isOwner() && isUnlock()) {
+        if (futureWeight <= totalWeight && !item.isOwner()) {
             listItems.add(item);
             item.setOwner(true);
             item.setNameContainer(getNameContainer());
@@ -89,8 +80,6 @@ public class BagItems extends ArrayList<Container> implements Container {
 
         } else if (this.curretWeight > this.totalWeight || futureWeight > totalWeight) {
             throw new ItemStoreException("Failed to save object");
-        } else if (!isUnlock()) {
-            System.err.println("Контейнер закрыт!Чтобы добавить предмет, сначала откройте контейнер!");
 
         } else if (item.isOwner()) {
             throw new ItemAlreadyPlacedException("Item is already in another container ");
@@ -100,9 +89,49 @@ public class BagItems extends ArrayList<Container> implements Container {
     }
 
 
+
+    public void addItemToContainer(BagItems whichPutIninBagItem) throws ItemAlreadyPlacedException, ItemStoreException {
+
+
+        int futureWeight = whichPutIninBagItem.getCurretWeight() + getCurretWeight();
+        if (!whichPutIninBagItem.isOwner() && futureWeight <= getTotalWeight()) {
+            int curretWeightTemp;
+            curretWeightTemp = getCurretWeight() + whichPutIninBagItem.getCurretWeight();
+            setCurretWeight(curretWeightTemp);
+            listItems.add(whichPutIninBagItem);
+            System.out.println("Контейнер" + "'" + whichPutIninBagItem.getNameContainer() + "'" + " добавлен в " + getNameContainer());
+            whichPutIninBagItem.setOwnerContainer(true);
+            whichPutIninBagItem.setNameInContainer(getNameContainer());
+
+        } else if (this.curretWeight > this.totalWeight || futureWeight > totalWeight) {
+            throw new ItemStoreException("Failed to save object");
+
+        } else if (isOwner()) {
+            throw new ItemAlreadyPlacedException("Item is already in another container ");
+        }
+
+    }
+
+    public Items getItemByName(String itemName) {
+        for (Items item : listItems) {
+            if (item.getName().equals(itemName) && item.getClass().equals(ItemImplementation.class)) {
+                ItemImplementation curretItem = (ItemImplementation) item;
+                getItem(curretItem);
+                return curretItem;
+            } else if (item.getName().equals(itemName) && item.getClass().equals(BagItems.class)) {
+                BagItems curretItem = (BagItems) item;
+                getItem(curretItem);
+                return curretItem;
+            }
+        }
+        System.out.println(itemName + " не найден");
+        return null;
+    }
+
+
     public void getItem(ItemImplementation item) {
 
-        if (listItems.size() > 0 && listItems.contains(item) && isUnlock()) {
+        if (listItems.size() > 0 && listItems.contains(item)) {
             this.curretWeight = curretWeight - item.getWeightItem();
             listItems.remove(item);
             item.setOwner(false);
@@ -110,51 +139,52 @@ public class BagItems extends ArrayList<Container> implements Container {
             System.out.println("Вытащили объект:" + item.getNameItem());
         } else if (!listItems.contains(item)) {
             System.err.println("Данного объекта нет в контейнере");
-        } else if (!isUnlock()) {
-            System.err.println("Контейнер закрыт! Чтобы добавить предмет, сначала откройте контейнер!");
+        }
+    }
+
+    public void getItem(BagItems bagItem) {
+
+        if (listItems.size() > 0 && listItems.contains(bagItem)) {
+            this.curretWeight = curretWeight - bagItem.getCurretWeight();
+            listItems.remove(bagItem);
+            bagItem.setOwnerContainer(false);
+            bagItem.setNameInContainer("Null");
+            System.out.println("Вытащили объект:" + bagItem.getNameContainer());
+        } else if (!listItems.contains(bagItem)) {
+            System.err.println("Данного объекта нет в контейнере");
         }
     }
 
     public void getRandomItem() {
 
-        if (!listItems.isEmpty() && isUnlock()) {
-            ItemImplementation randomItem = RandomItem();
-            this.curretWeight = curretWeight - randomItem.getWeightItem();
-            randomItem.setOwner(false);
-            randomItem.setNameContainer("Null");
-            listItems.remove(randomItem);
+        if (!listItems.isEmpty()) {
+            Items randomItemOf = randomItem();
+            if (randomItemOf.getClass().equals(BagItems.class)) {
+                BagItems randomItem = (BagItems) randomItemOf;
+                this.curretWeight = curretWeight - randomItem.getCurretWeight();
+                randomItem.setOwnerContainer(false);
+                randomItem.setNameInContainer("Null");
+                listItems.remove(randomItem);
 
-            System.out.println("Вытащили объект:" + randomItem.getNameItem());
+                System.out.println("Вытащили объект:" + randomItem.getNameContainer());
+            } else {
+                ItemImplementation randomItem = (ItemImplementation) randomItemOf;
 
+                this.curretWeight = curretWeight - randomItem.getWeightItem();
+                randomItem.setOwner(false);
+                randomItem.setNameContainer("Null");
+                listItems.remove(randomItem);
+
+                System.out.println("Вытащили объект:" + randomItem.getNameItem());
+            }
         } else if (listItems.isEmpty()) {
             System.err.println("Контейнер пуст");
-        } else if (!isUnlock()) {
-            System.err.println("Контейнер закрыт!Чтобы добавить предмет, сначала откройте контейнер!");
         }
     }
 
-    public void addContainerToContainer(BagItems whichPutIninBagItem) throws ItemAlreadyPlacedException, ItemStoreException {
-
-
-        int futureWeight = whichPutIninBagItem.getCurretWeight() + getCurretWeight();
-        if (isUnlock() && !whichPutIninBagItem.isOwner() && futureWeight <= getTotalWeight()) {
-            int curretWeightTemp;
-            curretWeightTemp = getCurretWeight() + whichPutIninBagItem.getCurretWeight();
-            setCurretWeight(curretWeightTemp);
-            listContainers.add(whichPutIninBagItem);
-
-            whichPutIninBagItem.setOwner(true);
-            whichPutIninBagItem.setNameInContainer(getNameContainer());
-
-        } else if (this.curretWeight > this.totalWeight || futureWeight > totalWeight) {
-            throw new ItemStoreException("Failed to save object");
-        } else if (!isUnlock()) {
-            System.err.println("Контейнер закрыт!Чтобы добавить предмет, сначала откройте контейнер!");
-
-        } else if (isOwner()) {
-            throw new ItemAlreadyPlacedException("Item is already in another container ");
-        }
-
+    @Override
+    public String getName() {
+        return getNameContainer();
     }
 
     public int getTotalWeight() {
@@ -165,19 +195,14 @@ public class BagItems extends ArrayList<Container> implements Container {
         return this.curretWeight;
     }
 
-    public boolean openBag() {
-        return this.unlock = true;
-    }
-
-    public boolean closeBag() {
-        return this.unlock = false;
-    }
-
 
     @Override
     public void getInfoContainer() {
         this.listItems.forEach(System.out::println);
-        this.listContainers.forEach(System.out::println);
+    }
+
+    public List<Items> getListFromContainer() {
+        return listItems;
     }
 
     @Override
@@ -188,10 +213,31 @@ public class BagItems extends ArrayList<Container> implements Container {
                 ", nameInContainer='" + nameInContainer + '\'' +
                 ", owner=" + owner +
                 ", curretWeight=" + curretWeight +
-                ", unlock=" + unlock +
                 ", listItems=" + listItems +
-                ", listContainers=" + listContainers +
                 '}';
+    }
+
+    @Override
+    public void getInfo() {
+        System.out.println("Наименование контейнера " + getNameContainer() + ", Максимальный вес  " + getTotalWeight() + ", Текущий вес " + getCurretWeight());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BagItems bagItems = (BagItems) o;
+        return totalWeight == bagItems.totalWeight &&
+                owner == bagItems.owner &&
+                curretWeight == bagItems.curretWeight &&
+                Objects.equals(nameContainer, bagItems.nameContainer) &&
+                Objects.equals(nameInContainer, bagItems.nameInContainer) &&
+                Objects.equals(listItems, bagItems.listItems);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(totalWeight, nameContainer, nameInContainer, owner, curretWeight, listItems);
     }
 }
 

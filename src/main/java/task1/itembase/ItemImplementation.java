@@ -1,21 +1,27 @@
 package task1.itembase;
 
-import task1.general.Item;
+import task1.general.Items;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class ItemImplementation implements Item {
-    private final String nameItem;
-    private final int weightItem;
-    private final Set<String> additionalPropertiesItem;
-    private boolean owner;
+public class ItemImplementation extends Items {
+    private String nameItem;
+    private int weightItem;
+    private Set<String> additionalPropertiesItem;
+    private boolean ownerbyContainer;
     private String nameContainer;
 
     public ItemImplementation(String nameItem, Set<String> additionalPropertiesItem) {
         this.weightItem = 0;
         this.nameItem = nameItem;
         this.additionalPropertiesItem = additionalPropertiesItem;
+    }
+
+
+    @Override
+    public String getName() {
+        return getNameItem();
     }
 
     public ItemImplementation(String nameItem, Set<String> additionalPropertiesItem, int weightItem) {
@@ -45,22 +51,26 @@ public class ItemImplementation implements Item {
         return additionalPropertiesItem;
     }
 
-    public void setOwner(boolean owner) {
-        this.owner = owner;
+    public void setOwner(boolean ownerbyContainer) {
+        this.ownerbyContainer = ownerbyContainer;
     }
 
     public boolean isOwner() {
-        return owner;
+        return ownerbyContainer;
     }
 
-
     @Override
-    public void getInfo(ItemImplementation nameItemImplementation) {
+    public void getInfo() {
         if (weightItem == 0) {
-            System.out.println("Наименование предмета:" + nameItemImplementation.nameItem + ", Доп.свойства: " + nameItemImplementation.additionalPropertiesItem);
+            System.out.println("Наименование предмета:" + getNameItem() + ", Доп.свойства: " + getAdditionalPropertiesItem());
         } else
 
-            System.out.println("Наименование предмета:" + nameItemImplementation.nameItem + ", Вес:" + nameItemImplementation.weightItem + ", Доп.свойства: " + nameItemImplementation.additionalPropertiesItem);
+            System.out.println("Наименование предмета:" + getNameItem() + ", Вес:" + getWeightItem() + ", Доп.свойства: " + getAdditionalPropertiesItem());
+    }
+
+    @Override
+    public void getInfoContainer() {
+        System.out.println(getNameContainer());
     }
 
 
@@ -76,15 +86,16 @@ public class ItemImplementation implements Item {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ItemImplementation itemImplementation = (ItemImplementation) o;
-        return weightItem == itemImplementation.weightItem &&
-                Objects.equals(nameItem, itemImplementation.nameItem) &&
-                Objects.equals(additionalPropertiesItem, itemImplementation.additionalPropertiesItem);
+        ItemImplementation that = (ItemImplementation) o;
+        return weightItem == that.weightItem &&
+                ownerbyContainer == that.ownerbyContainer &&
+                Objects.equals(nameItem, that.nameItem) &&
+                Objects.equals(additionalPropertiesItem, that.additionalPropertiesItem) &&
+                Objects.equals(nameContainer, that.nameContainer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameItem, weightItem, additionalPropertiesItem);
+        return Objects.hash(nameItem, weightItem, additionalPropertiesItem, ownerbyContainer, nameContainer);
     }
-
 }
