@@ -1,25 +1,33 @@
-package task1.itembase;
+package task1.models;
 
-import task1.exeptions.ItemAlreadyPlacedException;
-import task1.exeptions.ItemStoreException;
-import task1.general.Items;
-import task1.lists.ListProperties;
+import task1.exceptions.ItemAlreadyPlacedException;
+import task1.exceptions.ItemStoreException;
+import task1.data.properties.ListProperties;
 
 import java.util.*;
 
-public class StackItems extends Items {
+public class Stack extends AbstractContainer {
     private final int maxNumberOfItems;
     private final String nameStackItem;
     private int curretNumberOfItems;
     private final static boolean flat = true;
     private boolean owner = false;
     private int curretWeight = 0;
-    private Deque<Items> listItems;
+    private Deque<Item> listItems;
     private String nameInContainer;
+    private final boolean typeFlat = true;
 
-    public StackItems(Deque<Items> listItems, String nameStackItem,
-                      int curretNumberOfItems, int maxNumberOfItems) {
+    public Stack(Deque<Item> listItems, String nameStackItem,
+                 int curretNumberOfItems, int maxNumberOfItems) {
         this.listItems = listItems;
+        this.nameStackItem = nameStackItem;
+        this.curretNumberOfItems = curretNumberOfItems;
+        this.maxNumberOfItems = maxNumberOfItems;
+    }
+
+    public Stack(String nameStackItem,
+                 int curretNumberOfItems, int maxNumberOfItems) {
+        listItems = new ArrayDeque<>();
         this.nameStackItem = nameStackItem;
         this.curretNumberOfItems = curretNumberOfItems;
         this.maxNumberOfItems = maxNumberOfItems;
@@ -29,6 +37,9 @@ public class StackItems extends Items {
         this.nameInContainer = nameInContainer;
     }
 
+    public boolean isTypeFlat() {
+        return typeFlat;
+    }
 
     public int getMaxNumberOfItems() {
         return maxNumberOfItems;
@@ -46,9 +57,9 @@ public class StackItems extends Items {
         this.curretNumberOfItems = curretNumberOfItems;
     }
 
-    public void addItemToContainer(ItemImplementation item) throws ItemAlreadyPlacedException, ItemStoreException {
+    public void addItemToContainer(Item item) throws ItemAlreadyPlacedException, ItemStoreException {
 
-        boolean itemProperties = item.getAdditionalPropertiesItem().contains(ListProperties.FLAT.getPropertoies());
+        boolean itemProperties = item.getAdditionalPropertiesItem().contains(ListProperties.FLAT);
         int futureNumberOfItems = curretNumberOfItems + 1;
         if (itemProperties && futureNumberOfItems <= getMaxNumberOfItems() && !item.isOwner()) {
             listItems.addLast(item);
@@ -68,21 +79,27 @@ public class StackItems extends Items {
 
     }
 
+    public void addItemToContainer(Bag bag) throws ItemAlreadyPlacedException, ItemStoreException {
+        System.out.println("Предмет " + bag.getNameContainer() + " нельзя положить в контейнер");
+    }
+    public void addItemToContainer(Stack stack) throws ItemAlreadyPlacedException, ItemStoreException {
+        System.out.println("Предмет " + stack.getNameStack() + " нельзя положить в контейнер");
+    }
 
     public void getItem() {
 
         if (listItems.size() > 0) {
-            if (listItems.getFirst().getClass().equals(ItemImplementation.class)) {
-                ItemImplementation item = (ItemImplementation) listItems.peek();
+            if (listItems.getFirst().getClass().equals(Item.class)) {
+                Item item = listItems.peek();
                 listItems.remove(item);
                 setCurretWeight(getCurretWeight() - item.getWeightItem());
                 this.curretNumberOfItems = curretNumberOfItems - 1;
                 item.setOwner(false);
                 item.setNameContainer("Null");
                 System.out.println("Вытащили объект:" + item.getNameItem());
-            } else if (listItems.getLast().getClass().equals(BoxItems.class)) {
+            } else if (listItems.getLast().getClass().equals(Box.class)) {
 
-                BoxItems item = (BoxItems) listItems.peek();
+                Box item = (Box) listItems.peek();
                 listItems.remove(item);
                 setCurretWeight(getCurretWeight() - item.getCurretWeight());
                 this.curretNumberOfItems = curretNumberOfItems - 1;
@@ -125,23 +142,23 @@ public class StackItems extends Items {
     }
 
 
-    public void addBoxToStack(BoxItems whichPutIniBoxItems) throws ItemStoreException, ItemAlreadyPlacedException {
+    public void addBoxToStack(Box whichPutIniBox) throws ItemStoreException, ItemAlreadyPlacedException {
 
         int futureNumberOfItems = getCurretNumberOfItems() + 1;
 
-        if (futureNumberOfItems <= getMaxNumberOfItems() && !whichPutIniBoxItems.isOwner()) {
-            setCurretWeight(getCurretWeight() + whichPutIniBoxItems.getCurretWeight());
-            listItems.addFirst(whichPutIniBoxItems);
-            whichPutIniBoxItems.setOwner(true);
-            whichPutIniBoxItems.setNameInContainer(getNameStack());
+        if (futureNumberOfItems <= getMaxNumberOfItems() && !whichPutIniBox.isOwner()) {
+            setCurretWeight(getCurretWeight() + whichPutIniBox.getCurretWeight());
+            listItems.addFirst(whichPutIniBox);
+            whichPutIniBox.setOwner(true);
+            whichPutIniBox.setNameInContainer(getNameStack());
             setCurretNumberOfItems(getCurretNumberOfItems() + 1);
-            System.out.println("Предмет " + "'" + whichPutIniBoxItems.getNameContainer() + "'" + " добавлен в " + getNameStack());
+            System.out.println("Предмет " + "'" + whichPutIniBox.getNameContainer() + "'" + " добавлен в " + getNameStack());
         } else if (!isFlat()) {
-            System.err.println("Предмет " + "'" + whichPutIniBoxItems.getNameContainer() + "'" + " нельзя положить в " + "контейнер " + getNameStack());
+            System.err.println("Предмет " + "'" + whichPutIniBox.getNameContainer() + "'" + " нельзя положить в " + "контейнер " + getNameStack());
         } else if (futureNumberOfItems > getMaxNumberOfItems()) {
             throw new ItemStoreException("Failed to save object ");
 
-        } else if (whichPutIniBoxItems.isOwner()) {
+        } else if (whichPutIniBox.isOwner()) {
             throw new ItemAlreadyPlacedException("Item is already in another container ");
         }
 
@@ -171,7 +188,7 @@ public class StackItems extends Items {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StackItems that = (StackItems) o;
+        Stack that = (Stack) o;
         return maxNumberOfItems == that.maxNumberOfItems &&
                 curretNumberOfItems == that.curretNumberOfItems &&
                 owner == that.owner &&

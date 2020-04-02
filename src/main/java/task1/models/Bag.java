@@ -1,4 +1,4 @@
-package task1.itembase;
+package task1.models;
 
 
 import java.util.ArrayList;
@@ -7,29 +7,44 @@ import java.util.List;
 import java.util.Objects;
 
 
-import task1.exeptions.ItemAlreadyPlacedException;
-import task1.exeptions.ItemStoreException;
-import task1.general.Items;
+import task1.exceptions.ItemAlreadyPlacedException;
+import task1.exceptions.ItemStoreException;
 
 
-public class BagItems extends Items {
+public class Bag extends AbstractContainer {
     private final int totalWeight;
     private final String nameContainer;
     private String nameInContainer;
     private boolean owner = false;
     private int curretWeight;
-    private List<Items> listItems;
+    private List<Item> listItems;
+    private final boolean typeFlat = false;
 
-    public BagItems(List<Items> listItems, String nameContainer, int curretWeight, int totalWeight) {
+    public Bag(List<Item> listItems, String nameContainer, int totalWeight) {
         super();
         this.listItems = listItems;
-        this.curretWeight = curretWeight;
+        this.nameContainer = nameContainer;
+        this.totalWeight = totalWeight;
+
+        if(listItems.isEmpty()){
+            for(Item list:listItems){
+                curretWeight =curretWeight + list.getWeightItem();
+            }
+        }
+        curretWeight = 0;
+    }
+
+    public Bag(String nameContainer, int totalWeight) {
+        super();
+        this.listItems = new ArrayList<>();
+        this.curretWeight = 0;
         this.nameContainer = nameContainer;
         this.totalWeight = totalWeight;
     }
 
-    private Items randomItem() {
-        List<Items> mainList = new ArrayList<>();
+
+    private Item randomItem() {
+        List<Item> mainList = new ArrayList<>();
         mainList.addAll(listItems);
         int startNumber = 0;
         int random_number = startNumber + (int) (Math.random() * listItems.size());
@@ -41,6 +56,9 @@ public class BagItems extends Items {
         }
     }
 
+    public boolean isTypeFlat() {
+        return typeFlat;
+    }
 
     private void setCurretWeight(int curretWeight) {
         this.curretWeight = curretWeight;
@@ -67,8 +85,8 @@ public class BagItems extends Items {
         return owner;
     }
 
-
-    public void addItemToContainer(ItemImplementation item) throws ItemAlreadyPlacedException, ItemStoreException {
+@Override
+    public void addItemToContainer(Item item) throws ItemAlreadyPlacedException, ItemStoreException {
 
         int futureWeight = curretWeight + item.getWeightItem();
         if (futureWeight <= totalWeight && !item.isOwner()) {
@@ -90,7 +108,7 @@ public class BagItems extends Items {
 
 
 
-    public void addItemToContainer(BagItems whichPutIninBagItem) throws ItemAlreadyPlacedException, ItemStoreException {
+    public void addItemToContainer(Bag whichPutIninBagItem) throws ItemAlreadyPlacedException, ItemStoreException {
 
 
         int futureWeight = whichPutIninBagItem.getCurretWeight() + getCurretWeight();
@@ -112,14 +130,14 @@ public class BagItems extends Items {
 
     }
 
-    public Items getItemByName(String itemName) {
-        for (Items item : listItems) {
-            if (item.getName().equals(itemName) && item.getClass().equals(ItemImplementation.class)) {
-                ItemImplementation curretItem = (ItemImplementation) item;
+    public Item getItemByName(String itemName) {
+        for (Item item : listItems) {
+            if (item.getName().equals(itemName) && item.getClass().equals(Item.class)) {
+                Item curretItem =  item;
                 getItem(curretItem);
                 return curretItem;
-            } else if (item.getName().equals(itemName) && item.getClass().equals(BagItems.class)) {
-                BagItems curretItem = (BagItems) item;
+            } else if (item.getName().equals(itemName) && item.getClass().equals(Bag.class)) {
+                Bag curretItem = (Bag) item;
                 getItem(curretItem);
                 return curretItem;
             }
@@ -129,7 +147,7 @@ public class BagItems extends Items {
     }
 
 
-    public void getItem(ItemImplementation item) {
+    public void getItem(Item item) {
 
         if (listItems.size() > 0 && listItems.contains(item)) {
             this.curretWeight = curretWeight - item.getWeightItem();
@@ -142,7 +160,7 @@ public class BagItems extends Items {
         }
     }
 
-    public void getItem(BagItems bagItem) {
+    public Bag getItem(Bag bagItem) {
 
         if (listItems.size() > 0 && listItems.contains(bagItem)) {
             this.curretWeight = curretWeight - bagItem.getCurretWeight();
@@ -150,17 +168,20 @@ public class BagItems extends Items {
             bagItem.setOwnerContainer(false);
             bagItem.setNameInContainer("Null");
             System.out.println("Вытащили объект:" + bagItem.getNameContainer());
+            return  bagItem;
         } else if (!listItems.contains(bagItem)) {
             System.err.println("Данного объекта нет в контейнере");
+            return null;
         }
+        return null;
     }
 
     public void getRandomItem() {
 
         if (!listItems.isEmpty()) {
-            Items randomItemOf = randomItem();
-            if (randomItemOf.getClass().equals(BagItems.class)) {
-                BagItems randomItem = (BagItems) randomItemOf;
+            Item randomItemOf = randomItem();
+            if (randomItemOf.getClass().equals(Bag.class)) {
+                Bag randomItem = (Bag) randomItemOf;
                 this.curretWeight = curretWeight - randomItem.getCurretWeight();
                 randomItem.setOwnerContainer(false);
                 randomItem.setNameInContainer("Null");
@@ -168,7 +189,7 @@ public class BagItems extends Items {
 
                 System.out.println("Вытащили объект:" + randomItem.getNameContainer());
             } else {
-                ItemImplementation randomItem = (ItemImplementation) randomItemOf;
+                Item randomItem = randomItemOf;
 
                 this.curretWeight = curretWeight - randomItem.getWeightItem();
                 randomItem.setOwner(false);
@@ -182,7 +203,7 @@ public class BagItems extends Items {
         }
     }
 
-    @Override
+
     public String getName() {
         return getNameContainer();
     }
@@ -201,7 +222,7 @@ public class BagItems extends Items {
         this.listItems.forEach(System.out::println);
     }
 
-    public List<Items> getListFromContainer() {
+    public List<Item> getListFromContainer() {
         return listItems;
     }
 
@@ -217,27 +238,26 @@ public class BagItems extends Items {
                 '}';
     }
 
-    @Override
+
     public void getInfo() {
         System.out.println("Наименование контейнера " + getNameContainer() + ", Максимальный вес  " + getTotalWeight() + ", Текущий вес " + getCurretWeight());
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BagItems bagItems = (BagItems) o;
-        return totalWeight == bagItems.totalWeight &&
-                owner == bagItems.owner &&
-                curretWeight == bagItems.curretWeight &&
-                Objects.equals(nameContainer, bagItems.nameContainer) &&
-                Objects.equals(nameInContainer, bagItems.nameInContainer) &&
-                Objects.equals(listItems, bagItems.listItems);
+        if (!super.equals(o)) return false;
+        Bag bag = (Bag) o;
+        return totalWeight == bag.totalWeight &&
+                owner == bag.owner &&
+                curretWeight == bag.curretWeight &&
+                Objects.equals(nameContainer, bag.nameContainer) &&
+                Objects.equals(nameInContainer, bag.nameInContainer) &&
+                Objects.equals(listItems, bag.listItems);
     }
-
     @Override
     public int hashCode() {
-        return Objects.hash(totalWeight, nameContainer, nameInContainer, owner, curretWeight, listItems);
+        return Objects.hash(super.hashCode(), totalWeight, nameContainer, nameInContainer, owner, curretWeight, listItems);
     }
 }
 

@@ -1,13 +1,14 @@
-package task1.itembase;
+package task1.models;
 
-import task1.exeptions.ItemAlreadyPlacedException;
-import task1.exeptions.ItemStoreException;
-import task1.general.Items;
+import task1.exceptions.ItemAlreadyPlacedException;
+import task1.exceptions.ItemStoreException;
 
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class BoxItems extends Items {
+public class Box extends AbstractContainer {
     private final int maxNumberOfItems;
     private final int totalWeight;
     private final String nameContainer;
@@ -15,10 +16,10 @@ public class BoxItems extends Items {
     private int curretWeight;
     private int curretNumberOfItems = 0;
     private boolean owner = false;
+    private final boolean typeFlat = true;
+    private List<Item> listItems;
 
-    private List<Items> listItems;
-
-    public BoxItems(List<Items> listItems, int maxNumberOfItems, int totalWeight, String nameContainer, int curretWeight) {
+    public Box(List<Item> listItems, int maxNumberOfItems, int totalWeight, String nameContainer, int curretWeight) {
         this.maxNumberOfItems = maxNumberOfItems;
         this.totalWeight = totalWeight;
         this.nameContainer = nameContainer;
@@ -26,7 +27,16 @@ public class BoxItems extends Items {
         this.listItems = listItems;
     }
 
-    public void addItemToContainer(ItemImplementation item) throws ItemAlreadyPlacedException, ItemStoreException {
+    public Box(int maxNumberOfItems, int totalWeight, String nameContainer) {
+        this.maxNumberOfItems = maxNumberOfItems;
+        this.totalWeight = totalWeight;
+        this.nameContainer = nameContainer;
+        this.curretWeight = 0;
+        listItems = new ArrayList<>();
+    }
+
+    @Override
+    public void addItemToContainer(Item item) throws ItemAlreadyPlacedException, ItemStoreException {
         int futureWeight = getCurretWeight() + item.getWeightItem();
 
         if (futureWeight <= getTotalWeight() && !item.isOwner()) {
@@ -52,7 +62,7 @@ public class BoxItems extends Items {
     }
 
 
-    public void addItemToContainer(BoxItems whichPutIninBoxItem) throws ItemAlreadyPlacedException, ItemStoreException {
+    public void addItemToContainer(Box whichPutIninBoxItem) throws ItemAlreadyPlacedException, ItemStoreException {
 
 
         int futureWeight = whichPutIninBoxItem.getCurretWeight() + getCurretWeight();
@@ -75,7 +85,14 @@ public class BoxItems extends Items {
 
     }
 
-    public void addItemToContainer(StackItems whichPutIninStackItem) throws ItemAlreadyPlacedException, ItemStoreException {
+    public void addItemToContainer(Bag whichPutIninBagItem) throws ItemAlreadyPlacedException, ItemStoreException {
+
+
+        System.err.println("Предмет " + whichPutIninBagItem.getNameContainer() + " нельзя добавить в данный контейнер");
+
+    }
+
+    public void addItemToContainer(Stack whichPutIninStackItem) throws ItemAlreadyPlacedException, ItemStoreException {
 
 
         boolean boxProperties = whichPutIninStackItem.isFlat();
@@ -97,38 +114,42 @@ public class BoxItems extends Items {
 
     }
 
-    public void getItem() {
-        if (listItems.size() > 0) {
-            if (listItems.get(0).getClass() == ItemImplementation.class) {
-                ItemImplementation item = (ItemImplementation) listItems.get(0);
-                listItems.remove(item);
+    public Item getItem() {
+        if (!listItems.isEmpty()) {
+            if (listItems.get(0).getClass() == Item.class) {
+                Item item = listItems.get(0);
                 this.curretNumberOfItems = curretNumberOfItems - 1;
+                this.curretWeight = getCurretWeight() - item.getWeightItem();
                 item.setOwner(false);
                 item.setNameContainer("Null");
                 System.out.println("Вытащили объект:" + item.getNameItem());
-            } else if (listItems.get(0).getClass() == StackItems.class) {
+
+                return listItems.remove(0);
+            } else if (listItems.get(0).getClass() == Stack.class) {
 
 
-                StackItems item = (StackItems) listItems.get(0);
-                listItems.remove(item);
+                Stack item = (Stack) listItems.get(0);
+                this.curretWeight = getCurretWeight() - item.getWeightItem();
                 this.curretNumberOfItems = curretNumberOfItems - 1;
                 item.setOwner(false);
                 item.setNameInContainer("Null");
                 System.out.println("Вытащили объект:" + item.getNameStack());
-            } else if (listItems.get(0).getClass() == BoxItems.class) {
+                return listItems.remove(0);
+            } else if (listItems.get(0).getClass() == Box.class) {
 
 
-                BoxItems item = (BoxItems) listItems.get(0);
-                listItems.remove(item);
+                Box item = (Box) listItems.get(0);
+                this.curretWeight = getCurretWeight() - item.getCurretWeight();
                 this.curretNumberOfItems = curretNumberOfItems - 1;
                 item.setOwner(false);
                 item.setNameInContainer("Null");
                 System.out.println("Вытащили объект:" + item.getNameContainer());
+                return listItems.remove(0);
             }
 
-        }else {
+        } else
             System.out.println("Контейнер пуст!");
-        }
+        return null;
     }
 
     @Override
@@ -178,13 +199,16 @@ public class BoxItems extends Items {
     }
 
     public int getCurretWeight() {
-        return curretWeight;
+        return this.curretWeight;
     }
 
     public void setCurretWeight(int curretWeight) {
         this.curretWeight = curretWeight;
     }
 
+    public boolean isTypeFlat() {
+        return typeFlat;
+    }
 
     @Override
     public String toString() {
@@ -204,15 +228,15 @@ public class BoxItems extends Items {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BoxItems boxItems = (BoxItems) o;
-        return maxNumberOfItems == boxItems.maxNumberOfItems &&
-                totalWeight == boxItems.totalWeight &&
-                curretWeight == boxItems.curretWeight &&
-                curretNumberOfItems == boxItems.curretNumberOfItems &&
-                owner == boxItems.owner &&
-                Objects.equals(nameContainer, boxItems.nameContainer) &&
-                Objects.equals(nameInContainer, boxItems.nameInContainer) &&
-                Objects.equals(listItems, boxItems.listItems);
+        Box box = (Box) o;
+        return maxNumberOfItems == box.maxNumberOfItems &&
+                totalWeight == box.totalWeight &&
+                curretWeight == box.curretWeight &&
+                curretNumberOfItems == box.curretNumberOfItems &&
+                owner == box.owner &&
+                Objects.equals(nameContainer, box.nameContainer) &&
+                Objects.equals(nameInContainer, box.nameInContainer) &&
+                Objects.equals(listItems, box.listItems);
     }
 
     @Override

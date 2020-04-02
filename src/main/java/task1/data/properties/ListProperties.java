@@ -1,4 +1,4 @@
-package task1.lists;
+package task1.data.properties;
 
 public enum ListProperties {
 

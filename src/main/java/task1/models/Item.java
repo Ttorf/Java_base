@@ -1,34 +1,48 @@
-package task1.itembase;
+package task1.models;
 
-import task1.general.Items;
+import task1.data.properties.ListProperties;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class ItemImplementation extends Items {
+public class Item {
     private String nameItem;
     private int weightItem;
-    private Set<String> additionalPropertiesItem;
+    private Set<ListProperties> additionalPropertiesItem;
     private boolean ownerbyContainer;
     private String nameContainer;
 
-    public ItemImplementation(String nameItem, Set<String> additionalPropertiesItem) {
+    public Item(String nameItem, Set<ListProperties> additionalPropertiesItem) {
         this.weightItem = 0;
         this.nameItem = nameItem;
         this.additionalPropertiesItem = additionalPropertiesItem;
     }
 
-
-    @Override
-    public String getName() {
-        return getNameItem();
+    public Item(String nameItem) {
+        this.weightItem = 0;
+        this.nameItem = nameItem;
+        additionalPropertiesItem = new HashSet<>();
+    }
+    public Item(String nameItem,int weightItem) {
+        this.weightItem = weightItem;
+        this.nameItem = nameItem;
+        additionalPropertiesItem = new HashSet<>();
     }
 
-    public ItemImplementation(String nameItem, Set<String> additionalPropertiesItem, int weightItem) {
+    public Item(String nameItem, Set<ListProperties> additionalPropertiesItem, int weightItem) {
         this.nameItem = nameItem;
         this.weightItem = weightItem;
         this.additionalPropertiesItem = additionalPropertiesItem;
     }
+
+    protected Item() {
+    }
+
+    public String getName() {
+        return getNameItem();
+    }
+
 
     protected void setNameContainer(String nameContainer) {
         this.nameContainer = nameContainer;
@@ -47,9 +61,14 @@ public class ItemImplementation extends Items {
         return nameItem;
     }
 
-    public Set<String> getAdditionalPropertiesItem() {
+    public Set<ListProperties> getAdditionalPropertiesItem() {
         return additionalPropertiesItem;
     }
+
+    public void setAdditionalPropertiesItem(ListProperties properties) {
+        additionalPropertiesItem.add(properties);
+    }
+
 
     public void setOwner(boolean ownerbyContainer) {
         this.ownerbyContainer = ownerbyContainer;
@@ -59,7 +78,7 @@ public class ItemImplementation extends Items {
         return ownerbyContainer;
     }
 
-    @Override
+
     public void getInfo() {
         if (weightItem == 0) {
             System.out.println("Наименование предмета:" + getNameItem() + ", Доп.свойства: " + getAdditionalPropertiesItem());
@@ -68,7 +87,7 @@ public class ItemImplementation extends Items {
             System.out.println("Наименование предмета:" + getNameItem() + ", Вес:" + getWeightItem() + ", Доп.свойства: " + getAdditionalPropertiesItem());
     }
 
-    @Override
+
     public void getInfoContainer() {
         System.out.println(getNameContainer());
     }
@@ -86,7 +105,7 @@ public class ItemImplementation extends Items {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ItemImplementation that = (ItemImplementation) o;
+        Item that = (Item) o;
         return weightItem == that.weightItem &&
                 ownerbyContainer == that.ownerbyContainer &&
                 Objects.equals(nameItem, that.nameItem) &&
