@@ -1,12 +1,12 @@
 package data;
 
 import org.junit.Assert;
-import task1.exceptions.ItemAlreadyPlacedException;
-import task1.exceptions.ItemStoreException;
-import task1.models.Bag;
-import task1.models.Box;
-import task1.models.Item;
-import task1.models.Stack;
+import task.laba1.exceptions.ItemAlreadyPlacedException;
+import task.laba1.exceptions.ItemStoreException;
+import task.laba1.models.Bag;
+import task.laba1.models.Box;
+import task.laba1.models.Item;
+import task.laba1.models.Stack;
 
 public class TestMethods {
     public void getItemFromBox(Box box, Item item, Stack stack) throws ItemStoreException, ItemAlreadyPlacedException {

@@ -1,10 +1,10 @@
 package data;
 
-import task1.data.properties.ListProperties;
-import task1.models.Bag;
-import task1.models.Box;
-import task1.models.Item;
-import task1.models.Stack;
+import task.laba1.properties.ListProperties;
+import task.laba1.models.Bag;
+import task.laba1.models.Box;
+import task.laba1.models.Item;
+import task.laba1.models.Stack;
 
 import java.util.*;
 
@@ -47,8 +47,8 @@ public class DataTest {
     public   Bag bagItem = new Bag(nameBox1,totalWeight);
     public   Bag bagItem2 = new Bag(nameBox2, totalWeight);
     public   Bag bagItem3 = new Bag(nameBox3, totalWeight);
-    public   task1.models.Stack stack1 = new task1.models.Stack(ItemDeque, nameStack, curretNumberOfItems, maxNumberOfItems);
-    public   task1.models.Stack stack2 = new Stack(ItemDeque, nameStack, curretNumberOfItems2, maxNumberOfItems);
+    public   task.laba1.models.Stack stack1 = new task.laba1.models.Stack(ItemDeque, nameStack, curretNumberOfItems, maxNumberOfItems);
+    public   task.laba1.models.Stack stack2 = new Stack(ItemDeque, nameStack, curretNumberOfItems2, maxNumberOfItems);
     public   Box box = new Box(listItems, maxNumberOfItems, totalWeight, "Коробка картонная", curretWeight3);
     public   Box box2 = new Box(batList1, maxNumberOfItems, totalWeight, "Коробка пластиковая", curretWeight3);
 

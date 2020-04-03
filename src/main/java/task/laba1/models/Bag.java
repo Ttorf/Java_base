@@ -1,4 +1,4 @@
-package task1.models;
+package task.laba1.models;
 
 
 import java.util.ArrayList;
@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Objects;
 
 
-import task1.exceptions.ItemAlreadyPlacedException;
-import task1.exceptions.ItemStoreException;
+import task.laba1.exceptions.ItemAlreadyPlacedException;
+import task.laba1.exceptions.ItemStoreException;
 
 
 public class Bag extends AbstractContainer {
@@ -26,9 +26,9 @@ public class Bag extends AbstractContainer {
         this.nameContainer = nameContainer;
         this.totalWeight = totalWeight;
 
-        if(listItems.isEmpty()){
-            for(Item list:listItems){
-                curretWeight =curretWeight + list.getWeightItem();
+        if (listItems.isEmpty()) {
+            for (Item list : listItems) {
+                curretWeight = curretWeight + list.getWeightItem();
             }
         }
         curretWeight = 0;
@@ -85,7 +85,7 @@ public class Bag extends AbstractContainer {
         return owner;
     }
 
-@Override
+    @Override
     public void addItemToContainer(Item item) throws ItemAlreadyPlacedException, ItemStoreException {
 
         int futureWeight = curretWeight + item.getWeightItem();
@@ -107,19 +107,17 @@ public class Bag extends AbstractContainer {
     }
 
 
+    public void addItemToContainer(Bag whichPutInnBagItem) throws ItemAlreadyPlacedException, ItemStoreException {
 
-    public void addItemToContainer(Bag whichPutIninBagItem) throws ItemAlreadyPlacedException, ItemStoreException {
-
-
-        int futureWeight = whichPutIninBagItem.getCurretWeight() + getCurretWeight();
-        if (!whichPutIninBagItem.isOwner() && futureWeight <= getTotalWeight()) {
+        int futureWeight = whichPutInnBagItem.getCurretWeight() + getCurretWeight();
+        if (!whichPutInnBagItem.isOwner() && futureWeight <= getTotalWeight()) {
             int curretWeightTemp;
-            curretWeightTemp = getCurretWeight() + whichPutIninBagItem.getCurretWeight();
+            curretWeightTemp = getCurretWeight() + whichPutInnBagItem.getCurretWeight();
             setCurretWeight(curretWeightTemp);
-            listItems.add(whichPutIninBagItem);
-            System.out.println("Контейнер" + "'" + whichPutIninBagItem.getNameContainer() + "'" + " добавлен в " + getNameContainer());
-            whichPutIninBagItem.setOwnerContainer(true);
-            whichPutIninBagItem.setNameInContainer(getNameContainer());
+            listItems.add(whichPutInnBagItem);
+            System.out.println("Контейнер" + "'" + whichPutInnBagItem.getNameContainer() + "'" + " добавлен в " + getNameContainer());
+            whichPutInnBagItem.setOwnerContainer(true);
+            whichPutInnBagItem.setNameInContainer(getNameContainer());
 
         } else if (this.curretWeight > this.totalWeight || futureWeight > totalWeight) {
             throw new ItemStoreException("Failed to save object");
@@ -133,7 +131,7 @@ public class Bag extends AbstractContainer {
     public Item getItemByName(String itemName) {
         for (Item item : listItems) {
             if (item.getName().equals(itemName) && item.getClass().equals(Item.class)) {
-                Item curretItem =  item;
+                Item curretItem = item;
                 getItem(curretItem);
                 return curretItem;
             } else if (item.getName().equals(itemName) && item.getClass().equals(Bag.class)) {
@@ -168,7 +166,7 @@ public class Bag extends AbstractContainer {
             bagItem.setOwnerContainer(false);
             bagItem.setNameInContainer("Null");
             System.out.println("Вытащили объект:" + bagItem.getNameContainer());
-            return  bagItem;
+            return bagItem;
         } else if (!listItems.contains(bagItem)) {
             System.err.println("Данного объекта нет в контейнере");
             return null;
@@ -242,6 +240,7 @@ public class Bag extends AbstractContainer {
     public void getInfo() {
         System.out.println("Наименование контейнера " + getNameContainer() + ", Максимальный вес  " + getTotalWeight() + ", Текущий вес " + getCurretWeight());
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -255,6 +254,7 @@ public class Bag extends AbstractContainer {
                 Objects.equals(nameInContainer, bag.nameInContainer) &&
                 Objects.equals(listItems, bag.listItems);
     }
+
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), totalWeight, nameContainer, nameInContainer, owner, curretWeight, listItems);

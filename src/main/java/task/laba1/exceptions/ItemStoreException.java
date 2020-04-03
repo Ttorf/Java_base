@@ -1,4 +1,4 @@
-package task1.exceptions;
+package task.laba1.exceptions;
 
 public class ItemStoreException extends Exception {
 

@@ -1,6 +1,6 @@
-package task1.models;
+package task.laba1.models;
 
-import task1.data.properties.ListProperties;
+import task.laba1.properties.ListProperties;
 
 import java.util.HashSet;
 import java.util.Objects;

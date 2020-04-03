@@ -1,9 +1,11 @@
+package tests;
+
 import data.TestMethods;
 import org.junit.Before;
 import data.DataTest;
 import org.junit.Test;
-import task1.exceptions.ItemAlreadyPlacedException;
-import task1.exceptions.ItemStoreException;
+import task.laba1.exceptions.ItemAlreadyPlacedException;
+import task.laba1.exceptions.ItemStoreException;
 
 public class TestBag {
     DataTest dataTest = new DataTest();
@@ -22,7 +24,6 @@ public class TestBag {
 
     @Test
     public void CheckUnpackItemFromBagTest() throws ItemStoreException, ItemAlreadyPlacedException {
-
         testMethods.checkUnpackAndPutBag(dataTest.materialBuild, dataTest.materialBuild4, dataTest.materialBuild5, dataTest.materialBuild2, dataTest.bagItem, dataTest.bagItem2, dataTest.bagItem3);
 
     }

@@ -1,9 +1,11 @@
+package tests;
+
 import data.TestMethods;
 import org.junit.Before;
 import org.junit.Test;
 import data.DataTest;
-import task1.exceptions.ItemAlreadyPlacedException;
-import task1.exceptions.ItemStoreException;
+import task.laba1.exceptions.ItemAlreadyPlacedException;
+import task.laba1.exceptions.ItemStoreException;
 
 public class TestExceptions {
 
