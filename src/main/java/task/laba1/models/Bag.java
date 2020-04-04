@@ -1,8 +1,6 @@
 package task.laba1.models;
 
-
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Objects;
 
