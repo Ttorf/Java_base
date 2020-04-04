@@ -15,7 +15,7 @@ public class Lesson4 {
     String hight;
     String mass;
     String hairCollor;
-    String skinCollor;
+    String skin_color;
     String eyeCollor;
     String birth_year;
     String gender;
@@ -60,11 +60,11 @@ public class Lesson4 {
     }
 
     public String getSkinCollor() {
-        return skinCollor;
+        return skin_color;
     }
 
     public void setSkinCollor(String skinCollor) {
-        this.skinCollor = skinCollor;
+        this.skin_color = skinCollor;
     }
 
     public String getEyeCollor() {
@@ -142,9 +142,13 @@ public class Lesson4 {
     public static void main(String[] args) throws UnirestException {
         String json = Json();
         Gson gson = new Gson();
-        Lesson4 item = new Lesson4();
-        item = gson.fromJson(Json(), Lesson4.class);
-        System.out.println(item.getName());
+
+        Lesson4 item;
+
+        item = gson.fromJson(json, Lesson4.class);
+        String name2 = item.getSkinCollor();
+
+        System.out.println(name2);
 
     }
 
