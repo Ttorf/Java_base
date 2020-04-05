@@ -24,7 +24,8 @@ public class Item {
         this.nameItem = nameItem;
         additionalPropertiesItem = new HashSet<>();
     }
-    public Item(String nameItem,int weightItem) {
+
+    public Item(String nameItem, int weightItem) {
         this.weightItem = weightItem;
         this.nameItem = nameItem;
         additionalPropertiesItem = new HashSet<>();

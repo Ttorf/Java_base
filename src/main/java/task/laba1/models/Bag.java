@@ -17,19 +17,21 @@ public class Bag extends AbstractContainer {
     private int curretWeight;
     private List<Item> listItems;
     private final boolean typeFlat = false;
+    private int id;
 
     public Bag(List<Item> listItems, String nameContainer, int totalWeight) {
         super();
         this.listItems = listItems;
         this.nameContainer = nameContainer;
         this.totalWeight = totalWeight;
-
+        this.id = (int) (0 + Math.random() * 100);
         if (listItems.isEmpty()) {
             for (Item list : listItems) {
                 curretWeight = curretWeight + list.getWeightItem();
             }
         }
         curretWeight = 0;
+
     }
 
     public Bag(String nameContainer, int totalWeight) {
@@ -38,6 +40,7 @@ public class Bag extends AbstractContainer {
         this.curretWeight = 0;
         this.nameContainer = nameContainer;
         this.totalWeight = totalWeight;
+        this.id = (int) (0 + Math.random() * 100);
     }
 
 
@@ -108,7 +111,7 @@ public class Bag extends AbstractContainer {
     public void addItemToContainer(Bag whichPutInnBagItem) throws ItemAlreadyPlacedException, ItemStoreException {
 
         int futureWeight = whichPutInnBagItem.getCurretWeight() + getCurretWeight();
-        if (!whichPutInnBagItem.isOwner() && futureWeight <= getTotalWeight()) {
+        if (whichPutInnBagItem.id != (id) && !whichPutInnBagItem.isOwner() && futureWeight <= getTotalWeight()) {
             int curretWeightTemp;
             curretWeightTemp = getCurretWeight() + whichPutInnBagItem.getCurretWeight();
             setCurretWeight(curretWeightTemp);

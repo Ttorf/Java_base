@@ -18,13 +18,14 @@ public class Box extends AbstractContainer {
     private boolean owner = false;
     private final boolean typeFlat = true;
     private List<Item> listItems;
-
+    private  int id;
     public Box(List<Item> listItems, int maxNumberOfItems, int totalWeight, String nameContainer, int curretWeight) {
         this.maxNumberOfItems = maxNumberOfItems;
         this.totalWeight = totalWeight;
         this.nameContainer = nameContainer;
         this.curretWeight = curretWeight;
         this.listItems = listItems;
+        this.id = (int)(0 + Math.random()*100);
     }
 
     public Box(int maxNumberOfItems, int totalWeight, String nameContainer) {
@@ -33,6 +34,7 @@ public class Box extends AbstractContainer {
         this.nameContainer = nameContainer;
         this.curretWeight = 0;
         listItems = new ArrayList<>();
+        this.id = (int)(0 + Math.random()*100);
     }
 
     @Override
@@ -66,7 +68,7 @@ public class Box extends AbstractContainer {
 
 
         int futureWeight = whichPutIninBoxItem.getCurretWeight() + getCurretWeight();
-        if (!whichPutIninBoxItem.isOwner() && futureWeight <= getTotalWeight()) {
+        if (whichPutIninBoxItem.id != (id) &&!whichPutIninBoxItem.isOwner() && futureWeight <= getTotalWeight()) {
             int curretWeightTemp;
             curretWeightTemp = getCurretWeight() + whichPutIninBoxItem.getCurretWeight();
             setCurretWeight(curretWeightTemp);

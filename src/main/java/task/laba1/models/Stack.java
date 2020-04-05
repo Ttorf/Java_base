@@ -16,6 +16,7 @@ public class Stack extends AbstractContainer {
     private Deque<Item> listItems;
     private String nameInContainer;
     private final boolean typeFlat = true;
+    private int id;
 
     public Stack(Deque<Item> listItems, String nameStackItem,
                  int curretNumberOfItems, int maxNumberOfItems) {
@@ -23,6 +24,7 @@ public class Stack extends AbstractContainer {
         this.nameStackItem = nameStackItem;
         this.curretNumberOfItems = curretNumberOfItems;
         this.maxNumberOfItems = maxNumberOfItems;
+        this.id = (int) (0 + Math.random() * 100);
     }
 
     public Stack(String nameStackItem,
@@ -31,6 +33,7 @@ public class Stack extends AbstractContainer {
         this.nameStackItem = nameStackItem;
         this.curretNumberOfItems = curretNumberOfItems;
         this.maxNumberOfItems = maxNumberOfItems;
+        this.id = (int) (0 + Math.random() * 100);
     }
 
     public void setNameInContainer(String nameInContainer) {
@@ -82,6 +85,7 @@ public class Stack extends AbstractContainer {
     public void addItemToContainer(Bag bag) throws ItemAlreadyPlacedException, ItemStoreException {
         System.out.println("Предмет " + bag.getNameContainer() + " нельзя положить в контейнер");
     }
+
     public void addItemToContainer(Stack stack) throws ItemAlreadyPlacedException, ItemStoreException {
         System.out.println("Предмет " + stack.getNameStack() + " нельзя положить в контейнер");
     }
