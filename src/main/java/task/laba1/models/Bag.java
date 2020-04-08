@@ -65,6 +65,7 @@ public class Bag extends AbstractContainer {
         this.curretWeight = curretWeight;
     }
 
+    @Override
     void setOwnerContainer(boolean owner) {
         this.owner = owner;
     }
@@ -210,7 +211,7 @@ public class Bag extends AbstractContainer {
     public int getTotalWeight() {
         return this.totalWeight;
     }
-
+    @Override
     public int getCurretWeight() {
         return this.curretWeight;
     }

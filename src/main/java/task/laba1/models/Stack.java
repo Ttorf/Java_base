@@ -36,6 +36,10 @@ public class Stack extends AbstractContainer {
         this.id = (int) (0 + Math.random() * 100);
     }
 
+    public Deque<Item> getListItems() {
+        return listItems;
+    }
+
     public void setNameInContainer(String nameInContainer) {
         this.nameInContainer = nameInContainer;
     }
@@ -52,9 +56,6 @@ public class Stack extends AbstractContainer {
         return curretNumberOfItems;
     }
 
-    public String getNameInContainer() {
-        return nameInContainer;
-    }
 
     public void setCurretNumberOfItems(int curretNumberOfItems) {
         this.curretNumberOfItems = curretNumberOfItems;
@@ -73,6 +74,7 @@ public class Stack extends AbstractContainer {
             setCurretNumberOfItems(getCurretNumberOfItems() + 1);
         } else if (!itemProperties) {
             System.err.println("Предмет " + "'" + item.getNameItem() + "'" + " нельзя положить в " + "контейнер " + getNameStack());
+            throw new ItemStoreException("Failed to save object");
         } else if (futureNumberOfItems > getMaxNumberOfItems()) {
             throw new ItemStoreException("Failed to save object");
         } else if (item.isOwner()) {
@@ -83,36 +85,23 @@ public class Stack extends AbstractContainer {
     }
 
     public void addItemToContainer(Bag bag) throws ItemAlreadyPlacedException, ItemStoreException {
-        System.out.println("Предмет " + bag.getNameContainer() + " нельзя положить в контейнер");
+        System.out.println("Рюкзак " + bag.getNameContainer() + " нельзя положить в контейнер");
     }
 
     public void addItemToContainer(Stack stack) throws ItemAlreadyPlacedException, ItemStoreException {
-        System.out.println("Предмет " + stack.getNameStack() + " нельзя положить в контейнер");
+        System.out.println("Стак " + stack.getNameStack() + " нельзя положить в контейнер");
     }
 
-    public void getItem() {
+    public <T extends Item> T getItem() {
 
-        if (listItems.size() > 0) {
-            if (listItems.getFirst().getClass().equals(Item.class)) {
-                Item item = listItems.peek();
-                listItems.remove(item);
-                setCurretWeight(getCurretWeight() - item.getWeightItem());
-                this.curretNumberOfItems = curretNumberOfItems - 1;
-                item.setOwner(false);
-                item.setNameContainer("Null");
-                System.out.println("Вытащили объект:" + item.getNameItem());
-            } else if (listItems.getLast().getClass().equals(Box.class)) {
-
-                Box item = (Box) listItems.peek();
-                listItems.remove(item);
-                setCurretWeight(getCurretWeight() - item.getCurretWeight());
-                this.curretNumberOfItems = curretNumberOfItems - 1;
-                item.setOwner(false);
-                item.setNameInContainer("Null");
-                System.out.println("Вытащили объект:" + item.getNameContainer());
-            }
-
-        }
+        T item = (T) listItems.getLast();
+        listItems.remove(item);
+        setCurretWeight(getCurretWeight() - item.getWeightItem());
+        this.curretNumberOfItems = curretNumberOfItems - 1;
+        item.setOwner(false);
+        item.setNameContainer("Null");
+        System.out.println("Вытащили объект:" + item.getName());
+        return item;
     }
 
 
@@ -133,12 +122,21 @@ public class Stack extends AbstractContainer {
         return owner;
     }
 
-    public void setOwner(boolean owner) {
+
+
+    @Override
+    public int getCurretWeight() {
+        return curretWeight;
+    }
+
+    @Override
+    void setOwnerContainer(boolean owner) {
         this.owner = owner;
     }
 
-    public int getCurretWeight() {
-        return curretWeight;
+    @Override
+    public String getNameContainer() {
+        return nameInContainer;
     }
 
     public void setCurretWeight(int curretWeight) {

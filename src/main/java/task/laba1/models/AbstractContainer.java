@@ -8,4 +8,8 @@ public abstract class AbstractContainer  extends  Item{
     public abstract void getInfoContainer();
 
     abstract public void addItemToContainer(Item item) throws ItemAlreadyPlacedException, ItemStoreException;
+    abstract int getCurretWeight();
+    abstract void setOwnerContainer(boolean owner);
+    abstract public String getNameContainer();
+
 }
