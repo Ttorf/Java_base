@@ -95,22 +95,22 @@ public class Box extends AbstractContainer {
 
     }
 
-    public void addItemToContainer(Stack whichPutIninStackItem) throws ItemAlreadyPlacedException, ItemStoreException {
+    public void addItemToContainer(Stack whichPutInStackItem) throws ItemAlreadyPlacedException, ItemStoreException {
 
 
-        boolean boxProperties = whichPutIninStackItem.isFlat();
-        int futureWeight = curretWeight + whichPutIninStackItem.getCurretWeight();
+        boolean boxProperties = whichPutInStackItem.isFlat();
+        int futureWeight = curretWeight + whichPutInStackItem.getCurretWeight();
 
-        if (boxProperties && futureWeight <= getTotalWeight() && !whichPutIninStackItem.isOwner()) {
+        if (boxProperties && futureWeight <= getTotalWeight() && !whichPutInStackItem.isOwner()) {
 
-            listItems.add(whichPutIninStackItem);
-            setCurretNumberOfItems(whichPutIninStackItem.getCurretNumberOfItems() + getCurretNumberOfItems());
-            whichPutIninStackItem.setOwner(true);
-            whichPutIninStackItem.setNameInContainer(getNameContainer());
-            System.out.println("Предмет " + "'" + whichPutIninStackItem.getNameStack() + "'" + " добавлен в " + getNameContainer());
+            listItems.add(whichPutInStackItem);
+            setCurretNumberOfItems(whichPutInStackItem.getCurretNumberOfItems() + getCurretNumberOfItems());
+            whichPutInStackItem.setOwner(true);
+            whichPutInStackItem.setNameInContainer(getNameContainer());
+            System.out.println("Предмет " + "'" + whichPutInStackItem.getNameStack() + "'" + " добавлен в " + getNameContainer());
         } else if (futureWeight > getTotalWeight()) {
             throw new ItemStoreException("Failed to save object");
-        } else if (whichPutIninStackItem.isOwner()) {
+        } else if (whichPutInStackItem.isOwner()) {
             throw new ItemAlreadyPlacedException("Item is already in another container ");
         }
 

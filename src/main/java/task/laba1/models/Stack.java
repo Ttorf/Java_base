@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Stack extends AbstractContainer {
     private final int maxNumberOfItems;
-    private final String nameStackItem;
+    public final String nameStackItem;
     private int curretNumberOfItems;
     private final static boolean flat = true;
     private boolean owner = false;

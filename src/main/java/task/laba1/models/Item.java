@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Item {
-    private String nameItem;
+    public final String nameItem;
     private int weightItem;
     private Set<ListProperties> additionalPropertiesItem;
     private boolean ownerbyContainer;
@@ -38,6 +38,7 @@ public class Item {
     }
 
     protected Item() {
+        nameItem = null;
     }
 
     public String getName() {

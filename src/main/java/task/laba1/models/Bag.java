@@ -11,7 +11,7 @@ import task.laba1.exceptions.ItemStoreException;
 
 public class Bag extends AbstractContainer {
     private final int totalWeight;
-    private final String nameContainer;
+    public final String nameContainer;
     private String nameInContainer;
     private boolean owner = false;
     private int curretWeight;
