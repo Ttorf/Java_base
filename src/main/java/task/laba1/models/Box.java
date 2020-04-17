@@ -11,12 +11,12 @@ import java.util.Objects;
 public class Box extends AbstractContainer {
     private final int maxNumberOfItems;
     private final int totalWeight;
-    private final String nameContainer;
+    public final String nameContainer;
+    private final boolean typeFlat = true;
     private String nameInContainer;
     private int curretWeight;
     private int curretNumberOfItems = 0;
     private boolean owner = false;
-    private final boolean typeFlat = true;
     private List<Item> listItems;
     private int id;
 

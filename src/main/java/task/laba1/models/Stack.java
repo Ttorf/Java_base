@@ -8,14 +8,14 @@ import java.util.*;
 
 public class Stack extends AbstractContainer {
     private final int maxNumberOfItems;
+    private final static boolean flat = true;
+    private final boolean typeFlat = true;
     public final String nameStackItem;
     private int curretNumberOfItems;
-    private final static boolean flat = true;
     private boolean owner = false;
     private int curretWeight = 0;
     private Deque<Item> listItems;
     private String nameInContainer;
-    private final boolean typeFlat = true;
     private int id;
 
     public Stack(Deque<Item> listItems, String nameStackItem,
@@ -121,7 +121,6 @@ public class Stack extends AbstractContainer {
     public boolean isOwner() {
         return owner;
     }
-
 
 
     @Override

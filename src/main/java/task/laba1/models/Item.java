@@ -10,7 +10,7 @@ public class Item {
     public final String nameItem;
     private int weightItem;
     private Set<ListProperties> additionalPropertiesItem;
-    private boolean ownerbyContainer;
+    private boolean ownerByContainer;
     private String nameContainer;
 
     public Item(String nameItem, Set<ListProperties> additionalPropertiesItem) {
@@ -72,12 +72,12 @@ public class Item {
     }
 
 
-    public void setOwner(boolean ownerbyContainer) {
-        this.ownerbyContainer = ownerbyContainer;
+    public void setOwner(boolean ownerByContainer) {
+        this.ownerByContainer = ownerByContainer;
     }
 
     public boolean isOwner() {
-        return ownerbyContainer;
+        return ownerByContainer;
     }
 
 
@@ -109,7 +109,7 @@ public class Item {
         if (o == null || getClass() != o.getClass()) return false;
         Item that = (Item) o;
         return weightItem == that.weightItem &&
-                ownerbyContainer == that.ownerbyContainer &&
+                ownerByContainer == that.ownerByContainer &&
                 Objects.equals(nameItem, that.nameItem) &&
                 Objects.equals(additionalPropertiesItem, that.additionalPropertiesItem) &&
                 Objects.equals(nameContainer, that.nameContainer);
@@ -117,6 +117,6 @@ public class Item {
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameItem, weightItem, additionalPropertiesItem, ownerbyContainer, nameContainer);
+        return Objects.hash(nameItem, weightItem, additionalPropertiesItem, ownerByContainer, nameContainer);
     }
 }

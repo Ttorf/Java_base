@@ -11,12 +11,12 @@ import task.laba1.exceptions.ItemStoreException;
 
 public class Bag extends AbstractContainer {
     private final int totalWeight;
+    private final boolean typeFlat = false;
     public final String nameContainer;
     private String nameInContainer;
     private boolean owner = false;
     private int curretWeight;
     private List<Item> listItems;
-    private final boolean typeFlat = false;
     private int id;
 
     public Bag(List<Item> listItems, String nameContainer, int totalWeight) {
@@ -211,6 +211,7 @@ public class Bag extends AbstractContainer {
     public int getTotalWeight() {
         return this.totalWeight;
     }
+
     @Override
     public int getCurretWeight() {
         return this.curretWeight;
