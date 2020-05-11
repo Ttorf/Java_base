@@ -27,7 +27,6 @@ public class Box extends AbstractContainer {
         this.curretWeight = curretWeight;
         this.listItems = listItems;
         this.id = (int) (0 + Math.random() * 100);
-        //1
     }
 
     public Box(int maxNumberOfItems, int totalWeight, String nameContainer) {
@@ -37,11 +36,6 @@ public class Box extends AbstractContainer {
         this.curretWeight = 0;
         listItems = new ArrayList<>();
         this.id = (int) (0 + Math.random() * 100);
-
-
-
-
-
     }
 
     @Override
